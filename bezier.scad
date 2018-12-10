@@ -24,18 +24,18 @@ function shellPoints(MMx, MMy, MMz, up=1, down=1) = concat(
 	[for (v=[0:$fn]) for (u=[0:$fn]) point(MMx, MMy, MMz, u/$fn, v/$fn)-down*normal(MMx, MMy, MMz, u/$fn, v/$fn)]);
 
 function shellFaces() = let(f1=($fn+1), N2=f1*f1) concat(
-	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ (a)+f1*(b),   (a+1)+f1*(b),   (a)+f1*(b+1) ]], 
-	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ (a+1)+f1*(b), (a+1)+f1*(b+1), (a)+f1*(b+1) ]],
-	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ (a)+f1*(b)+N2,   (a+1)+f1*(b)+N2,   (a)+f1*(b+1)+N2 ]], 
-	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ (a+1)+f1*(b)+N2, (a+1)+f1*(b+1)+N2, (a)+f1*(b+1)+N2 ]], 
-	[for (a=[0:$fn-1]) [ (a)+f1*(0), (a)+f1*(0)+N2, (a+1)+f1*(0) ]], 
-	[for (a=[0:$fn-1]) [ (a+1)+f1*(0), (a+1)+f1*(0)+N2, (a)+f1*(0)+N2 ]], 
-	[for (a=[0:$fn-1]) [ (a)+f1*($fn), (a)+f1*($fn)+N2, (a+1)+f1*($fn) ]], 
-	[for (a=[0:$fn-1]) [ (a+1)+f1*($fn), (a+1)+f1*($fn)+N2, (a)+f1*($fn)+N2 ]], 
-	[for (a=[0:$fn-1]) [ (0)+f1*(a), (0)+f1*(a)+N2, (0)+f1*(a+1) ]], 
-	[for (a=[0:$fn-1]) [ (0)+f1*(a+1), (0)+f1*(a+1)+N2, (0)+f1*(a)+N2 ]], 
-	[for (a=[0:$fn-1]) [ ($fn)+f1*(a), ($fn)+f1*(a)+N2, ($fn)+f1*(a+1) ]], 
-	[for (a=[0:$fn-1]) [ ($fn)+f1*(a+1), ($fn)+f1*(a+1)+N2, ($fn)+f1*(a)+N2 ]]);
+	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ a+f1*b, a+1+f1*b, a+f1*(b+1) ]], 
+	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ a+1+f1*b, a+1+f1*(b+1), a+f1*(b+1) ]],
+	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ a+f1*b+N2, a+1+f1*b+N2, a+f1*(b+1)+N2 ]], 
+	[for (b=[0:$fn-1]) for (a=[0:$fn-1]) [ a+1+f1*b+N2, a+1+f1*(b+1)+N2, a+f1*(b+1)+N2 ]], 
+	[for (a=[0:$fn-1]) [ a, a+N2, a+1 ]], 
+	[for (a=[0:$fn-1]) [ a+1, a+1+N2, a+N2 ]], 
+	[for (a=[0:$fn-1]) [ a+f1*$fn, a+f1*$fn+N2, a+1+f1*$fn ]], 
+	[for (a=[0:$fn-1]) [ a+1+f1*$fn, a+1+f1*$fn+N2, a+f1*$fn+N2 ]], 
+	[for (a=[0:$fn-1]) [ f1*a, f1*a+N2, f1*(a+1) ]], 
+	[for (a=[0:$fn-1]) [ f1*(a+1), f1*(a+1)+N2, f1*a+N2 ]], 
+	[for (a=[0:$fn-1]) [ $fn+f1*a, $fn+f1*a+N2, $fn+f1*(a+1) ]], 
+	[for (a=[0:$fn-1]) [ $fn+f1*(a+1), $fn+f1*(a+1)+N2, $fn+f1*a+N2 ]]);
 
 
 module BezierShell(Px, Py, Pz, up=1, down=1, $fn=20)
