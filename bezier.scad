@@ -6,6 +6,8 @@ BinomialM = [
 	 [ -3,  3,  0, 0 ],
 	 [  1,  0,  0, 0 ]];
 	 
+function normalized(v) = v/norm(v);
+	 
 function makeMM(P) = BinomialM*P*BinomialM;
 function valUV(MM, u=0, v=0) = [v*v*v, v*v, v, 1] * MM * [u*u*u, u*u, u, 1];
 function tanU(MM, u=0, v=0) = [v*v*v, v*v, v, 1] * MM * [3*u*u, 2*u, 1, 0];
@@ -17,7 +19,7 @@ function point(MMx, MMy, MMz, u=0, v=0) = [
 function normal(MMx, MMy, MMz, u=0, v=0) = 
 	let(product=cross([tanU(MMx, u, v), tanU(MMy, u, v), tanU(MMz, u, v)],
 		 			  [tanV(MMx, u, v), tanV(MMy, u, v), tanV(MMz, u, v)]))
-	product/norm(product);
+	normalized(product);
 
 function shellPoints(MMx, MMy, MMz, up=1, down=1) = concat(
 	[for (v=[0:$fn]) for (u=[0:$fn]) point(MMx, MMy, MMz, u/$fn, v/$fn)+up*normal(MMx, MMy, MMz, u/$fn, v/$fn)],
@@ -49,3 +51,29 @@ module BezierShell(Px, Py, Pz, up=1, down=1, $fn=20)
 		shellFaces(Mx, My, Mz), 
 		convexity=10);
 };
+
+module PositionOnShell(uvPos, Px, Py, Pz, up=1, down=1, $fn=20)
+{
+	Mx=makeMM(Px);
+	My=makeMM(Py);
+	Mz=makeMM(Pz);
+	
+	for (i=[0:len(uvPos)-1])
+	{
+		p = point(Mx, My, Mz, uvPos[i][0], uvPos[i][1]);
+		u = normalized([
+			tanU(Mx, uvPos[i][0], uvPos[i][1]), 
+			tanU(My, uvPos[i][0], uvPos[i][1]), 
+			tanU(Mz, uvPos[i][0], uvPos[i][1])]);
+		w = normal(Mx, My, Mz, uvPos[i][0], uvPos[i][1]);
+		v = cross(w, u);
+		mat = [
+			[u[0], v[0], w[0], p[0]],
+			[u[1], v[1], w[1], p[1]],
+			[u[2], v[2], w[2], p[2]],
+			[   0,    0,    0,    1]];
+		multmatrix(mat) children(0);
+	}
+}
+
+
