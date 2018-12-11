@@ -52,7 +52,7 @@ module BezierShell(Px, Py, Pz, up=1, down=1, $fn=20)
 		convexity=10);
 };
 
-module PositionOnShell(uvPos, Px, Py, Pz, up=1, down=1, $fn=20)
+module PositionOnShell(uvPos, Px, Py, Pz)
 {
 	Mx=makeMM(Px);
 	My=makeMM(Py);
