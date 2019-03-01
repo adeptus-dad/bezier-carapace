@@ -34,7 +34,7 @@ difference()
 	BezierShell(Px, Py, Pz, up=0.1, down=0.1, $fn=30);
 
 	positions = [ for (u=[0.05:0.1:0.95]) for (v=[0.05:0.1:0.95]) [u, v] ];
-	PositionOnShell(positions, Px, Py, Pz, up=0.1, down=0.1)
+	PositionOnShell(positions, Px, Py, Pz)
 	{
 		mov(z=-0.3) cylinder(d=0.1, h=0.3);
 	}
