@@ -1,35 +1,6 @@
-use <bezier.scad>
+include <bezier.scad>
 use <spike.scad>
-
-module mov(x=0, y=0, z=0)
-{
-    translate([x, y, z])
-    children();
-}
-
-module rot(x=0, y=0, z=0)
-{
-    rotate([x, y, z])
-    children();
-}
-
-X = [ -26.0, -15.0, 16.0, 22.0 ];
-Y1 = [ 3.0, 8.0, 16.0, 3.0 ];
-Z1 = [-3.0, -0.2, -0.2, -0.2 ];
-Y2 = [ 1.0, 10.0, 18.0, 6.0 ];
-Z2 = [ -3.0, 17.0, 22.0, 10.0 ];
-
-Px = [[X[0]+4, X[1], X[2], X[3]],
-	  [X[0]+2, X[1], X[2], X[3]],
-	  [X[0]+2, X[1], X[2], X[3]],
-      [X[0]+4, X[1], X[2], X[3]]];	  
-Py = [[-Y1[0], -Y1[1], -Y1[2], -Y1[3] ],
-	  [-Y2[0], -Y2[1], -Y2[2], -Y2[3] ],
-	  [ Y2[0],  Y2[1],  Y2[2],  Y2[3] ],
-	  [ Y1[0],  Y1[1],  Y1[2],  Y1[3] ]];
-Pz = [Z1, Z2, Z2, Z1];
-	  
-border = 0.9;
+use <dummy.scad>
 
 difference()
 {
@@ -57,6 +28,34 @@ Carapace(up=1.5, down=0.0, offset=0.0);
 PositionOnShell(toppos, Px, Py, Pz)
 {
 	mov(z=-0.6) Spike(thickness=1.5, size=9);
+}
+
+Arrow();
+mirror([0,10]) Arrow();
+
+
+
+mov(x=15) mov(z=3) color("Tan") Head();
+mov(y=20) color("Tan") Laser();
+mirror([0,1,0]) mov(y=20) color("Tan") Laser();
+
+// ---------------------
+
+module Arrow()
+{
+	intersection()
+	{
+		Carapace(up=2.0, down=0.25, offset=0.0);
+		PositionOnShell([[0.72, 0.24]], Px, Py, Pz)
+		{
+			a = 0.5;
+			union()
+			{
+				rot(z=45) linear_extrude(height=5, center=true) polygon(points=[[0, -a], [4*a, -3*a], [0, 5*a], [-4*a, -3*a]], convexity=10);
+			rot(z=45) mov(y=-5) cube(size=[border, 10, 5], center=true);
+			}
+		}		
+	}
 }
 
 module Carapace(up=1.0, down=0.0, offset=0, $fn=30)
