@@ -2,6 +2,7 @@ include <bezier.scad>
 use <dummy.scad>
 use <carapace.scad>
 use <spike.scad>
+use <arm-v.scad>
 
 difference()
 {
@@ -118,42 +119,11 @@ mov(x=11, z=-2.9) rot(x=180) color("tan") Doors();
 mov(x=-15.5) rot(y=6.5) for (a=[-4:1.0:4]) mov(y=a) cube([10,0.6,2], center=true); 
 
 
-color("darkgrey") import("carapace-final.stl");
-mov(x=-3, y=8, z=3) color("orange") ArmV();
+//color("darkgrey") import("carapace-final.stl");
+//mov(x=-3, y=8, z=3) color("orange") ArmV();
 // #Dummies();
 
-module ArmV()
-{
-	$fn=72;
-	length=10.5;
-	sphere(d=8.5);
-	difference()
-	{
-		union()
-		{
-			mov(x=1.2) rot(x=-90) rot(y=4) 
-			{
-				 cylinder(d=3.2, h=length); 
-				 cylinder(d=4.5, h=4.2); 
-				 mov(z=3.8) crown(d=4.5, n=8) Rivet(1);
-				 mov(z=length-5) cylinder(d=4.5, h=5); 
-				 mov(z=length-5+0.4) crown(d=4.5, n=8) Rivet(1);
-				 mov(z=length-1.6) rot(x=90) { cylinder(d=5.2, h=6, center=true); cylinder(d=3.5, h=7.5, center=true); }
-			 }
-			mov(x=-1.2) rot(x=-90) rot(y=-9) 
-			{ 
-				cylinder(d=2.0, h=length);
-				cylinder(d=3.3, h=4.27); 
-				mov(z=3.8) crown(d=3.3, n=6) Rivet(1);
-				mov(z=length-4.0) cylinder(d=3.3, h=5); 
-				mov(z=length-4.0+0.4) crown(d=3.3, n=6) Rivet(1);
-			 	mov(z=length-1.4) rot(x=90) { cylinder(d=4.0, h=5, center=true); cylinder(d=3.0, h=6.5, center=true); }
-			}
-		}
-		mov(y=9.5+length) cube(size=20, center=true);
-		mov(y=length) cube([20,3.6,2.6], center=true);
-	}
-}
+
 
 
 
