@@ -15,10 +15,11 @@ module Head()
 
 module Laser()
 {
-	cube(size=[12, 3.4, 2.4], center=true);
+	$fn=36;
+	cube(size=[9, 3.4, 2.4], center=true);
+	//rot(x=90) cylinder(d=1, h=20);
 	mov(x=-3, y=3.5)
 	{
-		$fn=36;
 		cube(size=[18.4, 7, 11.6], center=true);
 		mov(z=2.4)
 		{	
@@ -33,4 +34,9 @@ module Laser()
 	}
 }
 
-Laser();
+module Dummies()
+{
+	mov(x=15) mov(z=3.5) color("Tan") Head();
+	mov(x=-3, y=18, z=3) color("Tan") Laser();
+	mirror([0,1,0]) mov(x=-3, y=18, z=3) color("Tan") Laser();
+}

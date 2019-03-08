@@ -3,7 +3,7 @@ module Spike(thickness=1, size=6)
 {
 	hull()
 	{
-		translate([0, 0, 0]) D8(s=thickness/2);
+		translate([0, 0, thickness]) D8(s=thickness/2);
 		translate([0, 0, 0.5*size]) D8(s=thickness/2);
 	}
 	

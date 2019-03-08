@@ -76,7 +76,7 @@ module PositionOnShell(uvPos, Px, Py, Pz)
 	}
 }
 
-// --------------
+// -------------- Utils --------------
 
 
 
@@ -92,11 +92,36 @@ module rot(x=0, y=0, z=0)
     children();
 }
 
-X = [ -26.0, -15.0, 16.0, 22.0 ];
-Y1 = [ 3.0, 8.0, 16.0, 3.0 ];
-Z1 = [-3.0, -0.2, -0.2, -0.2 ];
-Y2 = [ 1.0, 10.0, 18.0, 6.0 ];
-Z2 = [ -3.0, 17.0, 22.0, 10.0 ];
+module CylinderCog(length=10, r=5, n=6)
+{
+	difference()
+	{
+		cylinder(h=length, r=r, center=true);
+		for (i = [0:n]) rot(z=i*360/n)
+			linear_extrude(h=length) polygon(points=[[0,0], [2*r*cos(90/n), 2*r*sin(90/n)], [2*r*cos(90/n), -2*r*sin(90/n)]]);
+	}
+}
+
+module crown(d=10, n=6)
+{
+	for (i = [0:n-1]) rot(z=i*360/n) mov(x=d/2) rot(y=90) children();
+}
+
+module rectangle(w=10, h=10)
+{
+	mov(x=h/2, y=w/2) children();
+	mov(x=-h/2, y=w/2) children();
+	mov(x=h/2, y=-w/2) children();
+	mov(x=-h/2, y=-w/2) children();
+}
+
+// -------------- Coordinates --------------
+
+X = [ -32.0, -15.0, 16.0, 24.0 ];
+Y1 = [ 3.0, 12.0, 12.0, 6.0 ];
+Z1 = [-3.0, -0.8, -1.2, -1.2 ];
+Y2 = [ 1.0, 12.0, 14.0, 8.0 ];
+Z2 = [ -3.0, 21.0, 25.0, 14.0 ];
 
 Px = [[X[0]+4, X[1], X[2], X[3]],
 	  [X[0]+2, X[1], X[2], X[3]],
