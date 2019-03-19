@@ -44,7 +44,7 @@ module inside()
 	d = h-2*1.5;
 	hull() { mov(y=axis) cylinder(d=d, h=2); mov(y=-axis) cylinder(d=d, h=2); }
 	mov(x=h/4, z=1) cube([h/2,2.3,2], center=true);
-	mov(x=-h/4, z=1) cube([h/2,4.3,2], center=true);
+	mov(x=-h/4, z=0.5) cube([h/2,4.3,1], center=true);
 }
 
 module gatling()

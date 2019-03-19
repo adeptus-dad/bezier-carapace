@@ -21,7 +21,7 @@ difference()
 			Interior();
 			BezierShell(Px, Py, Pz, up=20, down=0.4, $fn=30);
 			mov(x=2) cylinder(d=8, h=10, center=true);
-			mov(x=15, z=3.5) sphere(d=7.8);
+			mov(x=16.5, z=3.5) sphere(d=7.8);
 		}
 		shoulder();
 		mirror([0,1,0]) shoulder();
@@ -56,7 +56,7 @@ module Interior()
 	hull()
 	{
 		mov(z=6) mov(x=-12) cube(size=9, center=true);
-		mov(z=9) mov(x=6) cube(size=14, center=true);
+		mov(z=9) mov(x=4.5) cube(size=14, center=true);
 		mov(z=8) mov(x=6) cube(size=[10,8,20], center=true);
 	}
 }
