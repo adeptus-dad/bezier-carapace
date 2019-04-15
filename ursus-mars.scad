@@ -1,23 +1,26 @@
 use <bezier.scad>
 use <carapace.scad>
 
-difference()
-{
-	ArmLeft();
-	$fn = 36;
-	rot(x=90) cylinder(d=3.4, h=8); // ∅3x4mm magnet
-}
 
 spoolX = -5;
 spoolZ = -2;
 spoolD = 10;
 
-mov(y=13)
+mov()
 {
-	color("grey") UrsusBody();
+	color("grey") difference()
+	{
+		UrsusBody();
+		mov(x=1.5)
+		{
+			$fn=36;
+			mov(z=2.5) cylinder(d=5.5, h=20);
+			mov(z=3) sphere(d=5); 
+		}
+	}
 	mov(x=7) rot(y=90) color("grey") UrsusClaw();
-	mov(x=spoolX,y=1,z=spoolZ) rot(x=90) color("lightblue") UrsusSpool();
-	color("white") Plating(thickness=1.2, fat=0.5);
+	mov(x=spoolX, z=spoolZ) rot(x=90) color("lightblue") UrsusSpool();
+	color("lightblue") Plating(thickness=1.2, fat=0.5);
 	color("orange") difference()
 	{
 		Plating(thickness=1.6, fat=0.8);
@@ -35,7 +38,7 @@ module UrsusBody()
 	hull()
 	{
 		cube([11,3,8], center=true);
-		cube([12,6,6], center=true);
+		mov(z=0.5) cube([12,6,7], center=true);
 	}
 
 	rot(y=90) cylinder(d=6, h=15);
@@ -43,17 +46,22 @@ module UrsusBody()
 	rot(y=90) mov(z=10.5) CylinderCog(length=2, r=3.5, n=8);
 	rot(y=90) cylinder(d=7, h=9);
 
-	rot(y=90) mov(z=4) for (a=[45, 135, 225, 315]) rot(z=a) mov(x=3.5)
+	rot(y=90) mov(z=4) for (a=[120, 240, 0]) rot(z=a) mov(x=3.5)
 	{
 		 cylinder(d=1, h=10);
 		 cylinder(d=1.5,h=7);
 		 mov(z=10) cylinder(d=1.5,h=1,center=true);
 	}
 
-	mov(x=0.5) rot(y=-30) difference() { cylinder(h=6,d1=1,d2=3); cylinder(h=10,d=2.0); }
-	mov(x=3.5) rot(y=-30) difference() { cylinder(h=6,d1=1,d2=3); cylinder(h=10,d=2.0); }
-	mov(x=6.5) rot(y=-30) difference() { cylinder(h=6,d1=1,d2=3); cylinder(h=10,d=2.0); }
+	module vents()
+	{
+		mov(x=0.5) rot(y=-30) difference() { cylinder(h=6,d1=1,d2=3); cylinder(h=10,d=2.0); }
+		mov(x=3.5) rot(y=-30) difference() { cylinder(h=6,d1=1,d2=3); cylinder(h=10,d=2.0); }
+		mov(x=6.5) rot(y=-30) difference() { cylinder(h=6,d1=1,d2=3); cylinder(h=10,d=2.0); }
+	}
 	
+	mov(x=3.5) rot(x=120) vents();
+	mov(x=3.5) rot(x=-120) vents();
 	
 	mov(x=spoolX,z=spoolZ) rot(x=90) 
 	{
@@ -82,34 +90,38 @@ module Plating(thickness=1.2, fat=0)
 	{
 		union()
 		{
-			mov(x=-7-fat, y=-3-fat, z=3.5) cube([16+2*fat, 6+1*fat, thickness]);
-			mov(x=-7-fat, y=-3-fat+6+1*fat, z=3.5) rot(x=-90) cube([16+2*fat, 6+1*fat, thickness]);
-			mov(x=-7-fat, y=-3-fat+6+1*fat, z=3.5) rot(y=90) cylinder(h=16+2*fat, r=thickness);
+			mov(x=-7-fat, y=-3, z=3.5) cube([18+2*fat, 6, thickness]);
+			mov(x=-7-fat, y=3, z=3.5) rot(x=-90) cube([18+2*fat, 6+fat, thickness]);
+			mov(x=-7-fat, y=3, z=3.5) rot(y=90) cylinder(h=18+2*fat, r=thickness);
+			mov(x=-7-fat, y=-3-thickness, z=3.5) rot(x=-90) cube([18+2*fat, 6+fat, thickness]);
+			mov(x=-7-fat, y=-3, z=3.5) rot(y=90) cylinder(h=18+2*fat, r=thickness);
 		}
+		mov(x=1.5) cylinder(d=7.5-2*fat, h=30);
 		hull()
 		{
-			mov(x=-2.4) cylinder(d=5-2*fat, h=30);
-			mov(x=4.1) cylinder(d=5-2*fat, h=30);
+			mov(x=30) cylinder(d=5-2*fat, h=30);
+			mov(x=8) cylinder(d=5-2*fat, h=30);
 		}
-		mov(x=-9.75+fat, y=-12+fat, z=3.2) cube(13-2*fat);
-		mov(x=-8-fat, y=-3-fat+6+1*fat, z=3.5) rot(x=180) cube([18+2*fat, 6+1*fat, thickness]);
+		cube([25, 6, 7], center=true);
+		mov(z=-3) cube([15, 30, 6.5-2*fat], center=true);
 		mov(x=spoolX,z=spoolZ) rot(x=90) cylinder(d=spoolD-1-2*fat+3, h=20, center=true);
-		mov(x=9.5, z=-2.5) rot(x=-90) cylinder(d=7-2*fat, h=20);
+		mov(x=7.5, z=-2.5) rot(x=-90) cylinder(d=5.5-2*fat, h=30, center=true);
 	}
 }
 
 module PlatingRivets()
 {
-	mov(x=9.4, y=-3.4, z=5.1) Rivet(1);
-	mov(x=2.9, y=-3.4, z=5.1) Rivet(1);
-	mov(x=2.9, y=-2.1, z=5.1) Rivet(1);
-	mov(x=9.4, y=3.4, z=5.1) Rivet(1);
-	mov(x=-7.4, y=0.6, z=5.1) Rivet(1);
-	mov(x=-4.4, y=0.6, z=5.1) Rivet(1);
+	mov(x=11.4, y=-3.4, z=5.1) Rivet(1);
+	mov(x=11.4, y=3.4, z=5.1) Rivet(1);
+	mov(x=-7.4, z=5.1) Rivet(1);
 	mov(x=-7.4, y=4.6, z=3.1) Rivet(1);
-	mov(x=9.4, y=4.6, z=0.6) Rivet(1);
-	mov(x=6.4, y=4.6, z=-2.9) Rivet(1);
-	mov(x=0.6, y=4.6, z=-2.9) Rivet(1);
+	mov(x=-7.4, y=-4.6, z=3.1) Rivet(1);
+	mov(x=11.4, y=4.6, z=-2.9) Rivet(1);
+	mov(x=9.8, y=4.6, z=-2.9) Rivet(1);
+	mov(x=0.3, y=4.6, z=-0.1) Rivet(1);
+	mov(x=11.4, y=-4.6, z=-2.9) Rivet(1);
+	mov(x=9.8, y=-4.6, z=-2.9) Rivet(1);
+	mov(x=0.3, y=-4.6, z=-0.1) Rivet(1);
 	
 }
 
@@ -146,8 +158,6 @@ module UrsusClaw()
 	
 	mov(x=2, z=11) rot(y=45) rot(x=180) Chain(link=1.2, n=23, up=90);
 }
-
-
 
 module OneFinger()
 {
@@ -212,27 +222,32 @@ module UrsusSpool()
 					cylinder(d=spoolD-1, h=6, center=true, $fn=72);
 					sphere(0.5);
 				}
-				mov(z=-0.1) cylinder(d=2, h=8, center=true);
+				cylinder(d=2, h=8.0, center=true);
 			}
 			intersection()
 			{
 				hull()
 				{
-					mov(z=1) rot(y=90, z=-38) cylinder(d=2.8, h=20);
-					mov(z=1) rot(y=90, z=-50) cylinder(d=2.8, h=20);
+					rot(y=90, z=-38) cylinder(d=2.8, h=20);
+					rot(y=90, z=-50) cylinder(d=2.8, h=20);
 				}
 				cylinder(d=spoolD+1, h=6, center=true, $fn=72);
 			}
 		}
 		hull()
 		{
-			mov(z=1) rot(y=90, z=-38) cylinder(d=2, h=20);
-			mov(z=1) rot(y=90, z=-50) cylinder(d=2, h=20);
+			rot(y=90, z=-38) cylinder(d=2, h=20);
+			rot(y=90, z=-50) cylinder(d=2, h=20);
 		}
 	}
 	for (a=[0:30:359]) rot(z=a) mov(x=spoolD/2-1, z=-3.6) Rivet(1);
 	for (a=[0:30:359]) rot(z=a) mov(x=spoolD/2-1, z=3.6) Rivet(1);
-	mov(z=-3.7) rot(x=180) 
+	mov(z=-3.8) rot(x=180) 
+	{
+		CylinderCog(length=1, r=1.5, n=8);
+		cylinder(h=1.2, d=2, center=true);
+	}
+	mov(z=3.8) rot(x=0) 
 	{
 		CylinderCog(length=1, r=1.5, n=8);
 		cylinder(h=1.2, d=2, center=true);
@@ -261,32 +276,3 @@ module ChainLink(length=2, odd=false)
 	}
 }
 
-
-
-module ArmLeft()
-{
-	$fn=72;
-	length=10.5;
-	sphere(d=8.5);
-	union()
-	{
-		mov(x=1.2) rot(x=-90) rot(y=4) 
-		{
-			 cylinder(d=3.2, h=length); 
-			 cylinder(d=4.5, h=4.2); 
-			 mov(z=3.8) crown(d=4.5, n=8) Rivet(1);
-			 mov(z=length-5) cylinder(d=4.5, h=5); 
-			 mov(z=length-5+0.4) crown(d=4.5, n=8) Rivet(1);
-			 mov(z=length-1.6) rot(x=90) { cylinder(d=5.2, h=6, center=true); cylinder(d=3.5, h=7.5, center=true); }
-		 }
-		mov(x=-1.2) rot(x=-90) rot(y=-9) 
-		{ 
-			cylinder(d=2.0, h=length);
-			cylinder(d=3.3, h=4.27); 
-			mov(z=3.8) crown(d=3.3, n=6) Rivet(1);
-			mov(z=length-4.0) cylinder(d=3.3, h=5); 
-			mov(z=length-4.0+0.4) crown(d=3.3, n=6) Rivet(1);
-		 	mov(z=length-1.4) rot(x=90) { cylinder(d=4.0, h=5, center=true); cylinder(d=3.0, h=6.5, center=true); }
-		}
-	}
-}
