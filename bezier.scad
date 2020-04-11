@@ -48,7 +48,7 @@ module BezierShell(Px, Py, Pz, up=1, down=1, $fn=20)
 	
 	polyhedron(
 		shellPoints(Mx, My, Mz, up, down), 
-		shellFaces(Mx, My, Mz), 
+		shellFaces(), // (Mx, My, Mz) ???
 		convexity=10);
 };
 
