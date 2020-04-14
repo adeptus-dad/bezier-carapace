@@ -41,6 +41,18 @@ module Head()
 			cube(size=[60, border, 40], center=true);
 		}
 		HeadShape(up=0.5, down=0.0, offset=0.0);
+
+		difference()
+		{
+			intersection()
+			{
+				mov(x=-8, z=-4) rot(y=30) for (h=[0:0.8:10]) mov(z=h) cube(size=[20, 16, 0.4], center=true);
+				mov(x=-8) rot(y=45)  cube(size=[20, 16, 20], center=true);			
+			}
+			HeadShape(up=10.0, down=0.0, offset=0.0);
+			Cutoff(offset=-1);
+			
+		}
 	}
 }
 
@@ -56,11 +68,23 @@ module HeadShape(up=1.0, down=0.0, offset=0, $fn=10)
 
 module Cutoff(offset=0)
 {
-	mov(x=9.0+offset) rot(y=17) cube(size=[8.0, 30.0, 30.0], center=true);
+	// nose
+	a = 28;
+	mov(x=11.5+offset, z=-5) rot(y=35)
+	{
+		rot(z=a) cube(size=[12.0, 30.0, 30.0], center=true);
+		rot(z=-a) cube(size=[12.0, 30.0, 30.0], center=true);
+ 	}
+	
+	// back head
 	mov(x=-15.0-offset) cube(size=[6.0, 30.0, 30.0], center=true);
+	
+	// bottom jaws
 	mov(z=-11-offset) rot(y=15) mov(x=-15) cube(size=[20, 40, 10], center=true);
+	
+	// bottom fangs
 	mov(z=-10-offset) rot(y=30) mov(x=5, z=-4) cube(size=[20, 40, 10], center=true);
-	mov(x=-3, z=-6) rot(x=90) cylinder(r=3.5-offset, h=30, $fn=48, center=true);
+	mov(x=-4, z=-6) rot(x=90) cylinder(r=3.5-offset, h=30, $fn=48, center=true);
 }
 
 

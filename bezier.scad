@@ -98,7 +98,7 @@ module CylinderCog(length=10, r=5, n=6)
 	{
 		cylinder(h=length, r=r, center=true);
 		for (i = [0:n]) rot(z=i*360/n)
-			linear_extrude(h=length) polygon(points=[[0,0], [2*r*cos(90/n), 2*r*sin(90/n)], [2*r*cos(90/n), -2*r*sin(90/n)]]);
+			linear_extrude(height=length) polygon(points=[[0,0], [2*r*cos(90/n), 2*r*sin(90/n)], [2*r*cos(90/n), -2*r*sin(90/n)]]);
 	}
 }
 
