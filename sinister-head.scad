@@ -2,8 +2,8 @@ include <bezier.scad>
 
 // -------------- Bezier Coordinates --------------
 
-X = [ -20.0, -3.0, 0.0, 8.0 ];
-Y1 = [ 2.0, 8.0, 0.0, -2.0 ];
+X = [ -20.0, -3.0, 0.0, 10.0 ];
+Y1 = [ 2.0, 8.0, 0.0, 0.5 ];
 Z1 = [ -2.0, -4.0, -10.0, -20.0 ];
 Y2 = [ 8.0, 18.0, 2.0, 8.0 ];
 Z2 = [ 6.0, 16.0, -4.0, 6.0 ];
@@ -30,10 +30,13 @@ module Head()
 	
 	mov(z=-1.5) rot(y=-2) mov(x=14)
 	{
+		// %BezierShell(Px, Py, Pz, up=0.5, down=0.0, $fn=30);
+		
+		// Trims 
 		difference()
 		{
 			HeadShape(up=1.0, down=0.2, offset=border/2);
-			HeadShape(up=4.0, down=4.0, offset=-border/2);
+			HeadShape(up=4.0, down=1.0, offset=-border/2);
 		}
 		intersection() // nervure centrale
 		{
@@ -42,17 +45,26 @@ module Head()
 		}
 		HeadShape(up=0.5, down=0.0, offset=0.0);
 
+		// Head internals
 		difference()
 		{
-			intersection()
-			{
-				mov(x=-8, z=-4) rot(y=30) for (h=[0:0.8:10]) mov(z=h) cube(size=[20, 16, 0.4], center=true);
-				mov(x=-8) rot(y=45)  cube(size=[20, 16, 20], center=true);			
-			}
-			HeadShape(up=10.0, down=0.0, offset=0.0);
-			Cutoff(offset=-1);
+			mov(x=-8, z=-4) rot(y=30) for (h=[0:0.8:10]) mov(x=10, z=h) cube(size=[7.5, 8, 0.4], center=true);
 			
+			HeadShape(up=10.0, down=0.0, offset=0.0);
+			InternalsCutoff(offset=-1);
 		}
+		difference()
+		{
+			mov(x=-8, z=-4) rot(y=30) mov(x=10, z=5) cube(size=[7.5, 8, 10], center=true);
+			
+			HeadShape(up=10.0, down=0.0, offset=0.0);
+			InternalsCutoff(offset=-2);
+		}
+		
+		// Whiskers
+		mov(x=-5.5, z=-3.5) rot(x=120) Whiskers();
+		mov(x=-5.5, z=-3.5) rot(x=-120) Whiskers();
+		
 	}
 }
 
@@ -61,9 +73,51 @@ module HeadShape(up=1.0, down=0.0, offset=0, $fn=10)
 {
 	difference()
 	{
-		BezierShell(Px, Py, Pz, up=up, down=down, $fn=60);
+		BezierShell(Px, Py, Pz, up=up, down=down, $fn=30);
 		Cutoff(offset=offset);
 	}
+}
+
+module Whiskers()
+{
+	difference()
+	{
+		intersection()
+		{
+			for (a=[0:30:179]) rot(z=a) cube(size=[0.4, 20, 20], center=true);
+			
+			cylinder(d=5, h=6);
+			d = 0.4;
+			cylinder(d1=15+2*d, d2=0, h=7.5+d);
+		}
+		cylinder(d=2.5, h=10);
+	}
+	
+	difference()
+	{
+		intersection()
+		{
+			cylinder(d=4, h=5.5);
+			d = -0.4;
+			cylinder(d1=15+2*d, d2=0, h=7.5+d);
+		}
+		cylinder(d=1.0, h=10);
+	}
+}
+
+module InternalsCutoff(offset=0)
+{
+	// nose
+	a = 28;
+	mov(x=11.5+offset, z=-5) rot(y=35)
+	{
+		rot(z=a) cube(size=[12.0, 30.0, 30.0], center=true);
+		rot(z=-a) cube(size=[12.0, 30.0, 30.0], center=true);
+ 	}
+	
+	// back head
+	mov(x=-15.0-offset) cube(size=[6.0, 30.0, 30.0], center=true);
+	
 }
 
 module Cutoff(offset=0)
@@ -84,7 +138,7 @@ module Cutoff(offset=0)
 	
 	// bottom fangs
 	mov(z=-10-offset) rot(y=30) mov(x=5, z=-4) cube(size=[20, 40, 10], center=true);
-	mov(x=-4, z=-6) rot(x=90) cylinder(r=3.5-offset, h=30, $fn=48, center=true);
+	mov(x=-5.5, z=-6) rot(x=90) cylinder(r=3.5-offset, h=30, $fn=48, center=true);
 }
 
 

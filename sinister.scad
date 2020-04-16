@@ -4,7 +4,7 @@ use <carapace.scad>
 use <spike.scad>
 use <arm-v.scad>
 
-if(true)
+if(false)
 {
 	color("darkgrey") import("stl/carapace.stl");
 	color("darkgrey") import("stl/body.stl");
