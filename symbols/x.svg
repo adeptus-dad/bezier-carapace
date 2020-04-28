@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="15.5" height="16.173" viewBox="0, 0, 15.5, 16.173">
+  <g id="Calque_4" transform="translate(7.75, 8.087)">
+    <path d="M7.75,-8.087 L6.45,-6.462 L1.281,-0 L6.45,6.462 L7.75,8.087 L-7.75,8.087 L-6.45,6.462 L-1.281,-0 L-6.45,-6.462 L-7.75,-8.087 L7.75,-8.087 z M0,1.601 L-3.589,6.087 L3.589,6.087 L0,1.601 z M3.589,-6.087 L-3.589,-6.087 L0,-1.601 L3.589,-6.087 z" fill="#FF0000"/>
+    <path d="M5.669,-1 L5.669,1 L-5.669,1 L-5.669,-1 L5.669,-1 z" fill="#FF0000"/>
+  </g>
+</svg>

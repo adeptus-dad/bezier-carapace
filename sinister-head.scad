@@ -22,11 +22,20 @@ border = 0.9;
 
 // -----------------------------------------
 
+mov(x=15) mov(z=3.5) 
+{
+	Head();
+	// BoxHead();
+}
+
+
+// -----------------------------------------
+
 module Head()
 {
 	$fn=36;
-	sphere(d=7.4);
-	mov(x=1) rot(y=90) cylinder(d=9.1, h=2, center=true);
+	color("grey") sphere(d=7.4);
+	color("grey") mov(x=1.3) rot(y=90) cylinder(d=9.8, h=2, center=true);
 	
 	mov(z=-1.5) rot(y=-2) mov(x=14)
 	{
@@ -43,7 +52,7 @@ module Head()
 			HeadShape(up=1.0, down=0.2, offset=0.0);
 			cube(size=[60, border, 40], center=true);
 		}
-		HeadShape(up=0.5, down=0.0, offset=0.0);
+		color("darkgreen") HeadShape(up=0.5, down=0.8, offset=0.0);
 
 		// Head internals
 		difference()
@@ -55,16 +64,26 @@ module Head()
 		}
 		difference()
 		{
-			mov(x=-8, z=-4) rot(y=30) mov(x=10, z=5) cube(size=[7.5, 8, 10], center=true);
+			mov(x=-8, z=-4) rot(y=30) mov(x=10, z=5) cube(size=[8.5, 8, 10], center=true);
 			
 			HeadShape(up=10.0, down=0.0, offset=0.0);
 			InternalsCutoff(offset=-2);
 		}
 		
 		// Whiskers
-		mov(x=-5.5, z=-3.5) rot(x=120) Whiskers();
-		mov(x=-5.5, z=-3.5) rot(x=-120) Whiskers();
+		color("grey") mov(x=-5.5, z=-3.5) rot(x=120) Whiskers();
+		color("grey") mov(x=-5.5, z=-3.5) rot(x=-120) Whiskers();
 		
+		// Internal frame
+		mov(x=-6) rot(y=20) mov(z=-2) #cube(size=[13, 2, 6], center=true);
+
+		ridgeRivets = [for (x=[8.6:7.1:52]) [x/60, 0.5]];
+		PositionOnShell(ridgeRivets, Px, Py, Pz)
+		{
+			mov(z=1) Rivet(2);
+		}
+		RightRivets();
+		mirror([0,1,0]) RightRivets();
 	}
 }
 
@@ -73,7 +92,7 @@ module HeadShape(up=1.0, down=0.0, offset=0, $fn=10)
 {
 	difference()
 	{
-		BezierShell(Px, Py, Pz, up=up, down=down, $fn=30);
+		BezierShell(Px, Py, Pz, up=up, down=down, $fn=60);
 		Cutoff(offset=offset);
 	}
 }
@@ -92,7 +111,6 @@ module Whiskers()
 		}
 		cylinder(d=2.5, h=10);
 	}
-	
 	difference()
 	{
 		intersection()
@@ -103,6 +121,7 @@ module Whiskers()
 		}
 		cylinder(d=1.0, h=10);
 	}
+	cylinder(d=6, h=3);
 }
 
 module InternalsCutoff(offset=0)
@@ -139,6 +158,33 @@ module Cutoff(offset=0)
 	// bottom fangs
 	mov(z=-10-offset) rot(y=30) mov(x=5, z=-4) cube(size=[20, 40, 10], center=true);
 	mov(x=-5.5, z=-6) rot(x=90) cylinder(r=3.5-offset, h=30, $fn=48, center=true);
+}
+
+
+module Rivet(n=1)
+{
+	$fn=24;
+	mov(z=0.0) sphere(d=0.2+n*0.2);
+}
+
+module RightRivets()
+{	
+	borderRivets = 
+	[
+	[8.29/60, 13.65/60],
+	[7.6/60, 1.4/60],
+	
+	[15/60, 1.7/60],
+	[25/60, 5.9/60],
+	[30/60, 1.4/60],
+	[40.75/60, 15/60]
+	];
+	
+	PositionOnShell(borderRivets, Px, Py, Pz)
+	{
+		mov(z=1) Rivet(2);
+	}
+	
 }
 
 
