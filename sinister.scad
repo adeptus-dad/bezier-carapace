@@ -4,15 +4,16 @@ use <sinister-carapace.scad>
 use <spike.scad>
 use <arm-v.scad>
 
-if(false)
+if(true)
 {
-	import("stl/sinister-head.stl");
+	color("DarkSeaGreen") import("stl/sinister-head.stl");
+	color("DarkSeaGreen") import("stl/sinister-carapace.stl");
 	color("darkgrey") import("stl/body.stl");
-	mov(x=-3, y=8, z=3) color("orange") import("stl/arm-v.stl");
-	mov(x=-3, y=-8, z=3) rot(z=180) color("orange") import("stl/arm-v.stl");
+	mov(x=-3, y=8, z=3) color("DarkSlateGrey") import("stl/ursus-claw.stl");
+	mov(x=-3, y=-8, z=3) rot(z=180) color("DarkSlateGrey") import("stl/arm-v.stl");
 }
 
-CarapaceFinal();
+// CarapaceFinal();
 
 
 // mov(x=15) mov(z=3.5) Head();

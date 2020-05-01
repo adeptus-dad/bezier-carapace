@@ -26,8 +26,8 @@ module CarapaceFinal()
 	RightRivets();
 	mirror([0,1,0]) RightRivets();
 	
-	
-	
+	PositionOnShell([[0.35,   0.33]], Px, Py, Pz) CiricruxAnima();
+	PositionOnShell([[0.35, 1-0.33]], Px, Py, Pz) CiricruxAnima();
 }
 
 
@@ -154,6 +154,36 @@ module CarapaceSmooth()
 
 
 // ---------------------
+
+
+module CiricruxAnima()
+{
+	$fn = 32;
+	difference()
+	{
+		intersection()
+		{
+			for (a=[0:30:179]) rot(z=a) cube(size=[0.4, 20, 20], center=true);
+			
+			mov(z=2) cylinder(d=7, h=2);
+			d = 0.4;
+			mov(z=-1) cylinder(d1=15+2*d, d2=0, h=7.5+d);
+		}
+		cylinder(d=2.5, h=10);
+	}
+	difference()
+	{
+		intersection()
+		{
+			cylinder(d=4, h=3.5);
+			d = -0.4;
+			cylinder(d1=15+2*d, d2=0, h=7.5+d);
+		}
+		cylinder(d=1.0, h=10);
+	}
+	cylinder(d=6, h=1.6);
+}
+
 
 module Arrow(a=0.2)
 {
