@@ -6,7 +6,9 @@ spoolX = -5;
 spoolZ = -2;
 spoolD = 10;
 
-mov()
+mars_claw();
+
+module mars_claw()
 {
 	color("grey") difference()
 	{
@@ -191,6 +193,7 @@ module OneFinger()
 module OneClaw(thickness=1.5, height=2.5, factor=4)
 {
 	diameter = height*factor;
+	length=0;
 	intersection()
 	{
 		$fn = 72;
