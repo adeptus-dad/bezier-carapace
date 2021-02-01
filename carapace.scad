@@ -122,17 +122,25 @@ module CarapaceSmooth()
 
 // ---------------------
 
-module Arrow(a=0.2)
+module Arrow(a=0.2, fleury=true)
 {
-	difference()
+	if (fleury)
 	{
-		$fn=24;
-		linear_extrude(height=5, center=true) polygon(points=[[0, 9*a], [-6*a, -4*a], [6*a, -4*a]], convexity=10);
-		mov(x=4.5*a, y=-4.5*a) cylinder(d=5*a, h=5, center=true);
-		mov(x=-4.5*a, y=-4.5*a) cylinder(d=5*a, h=5, center=true);
+		s = 0.5 * a;
+		linear_extrude(height=5, center=true) mov(y=-.39)  scale([s, s, s]) import("fleury.svg", convexity=3);
 	}
+	else
+	{
+		difference()
+		{
+			$fn=24;
+			linear_extrude(height=5, center=true) polygon(points=[[0, 9*a], [-6*a, -4*a], [6*a, -4*a]], convexity=10);
+			mov(x=4.5*a, y=-4.5*a) cylinder(d=5*a, h=5, center=true);
+			mov(x=-4.5*a, y=-4.5*a) cylinder(d=5*a, h=5, center=true);
+		}
 	
-	mov(y=-5) cube(size=[4*a, 10, 5], center=true);
+		mov(y=-5) cube(size=[4*a, 10, 5], center=true);
+	}
 }
 
 module Carapace(up=1.0, down=0.0, offset=0, $fn=30)
@@ -148,11 +156,11 @@ module Cutoff(offset=0)
 {
 	PositionOnShell([[0.93, 0.12], [0.93, 0.88]], Px, Py, Pz)
 	{
-		mov(z=1.0) sphere(d=15.0-2*offset, center=true, $fn=40);
+		mov(z=1.0) sphere(d=15.0-2*offset, $fn=40);
 	}
 	PositionOnShell([[0.45, 0.07], [0.45, 0.93]], Px, Py, Pz)
 	{
-		mov(z=1.0) sphere(d=15.0-2*offset, center=true, $fn=40);
+		mov(z=1.0) sphere(d=15.0-2*offset, $fn=40);
 	}
 	PositionOnShell([[0.97, 0.5]], Px, Py, Pz)
 	{
