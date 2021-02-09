@@ -6,7 +6,7 @@ spoolX = -5;
 spoolZ = -2;
 spoolD = 10;
 
-mars_claw();
+mars_spear();
 
 module mars_claw()
 {
@@ -31,8 +31,69 @@ module mars_claw()
 	PlatingRivets();
 }
 
+module mars_spear()
+{
+	color("grey") difference()
+	{
+		UrsusBody();
+		mov(x=1.5)
+		{
+			$fn=36;
+			mov(z=2.5) cylinder(d=5.5, h=20);
+			mov(z=3) sphere(d=5); 
+		}
+	}
+	mov(x=7) rot(y=90) color("grey") ElectricSpear();
+	mov(x=spoolX, z=spoolZ) rot(x=90) color("lightblue") UrsusSpool();
+	color("lightblue") Plating(thickness=1.2, fat=0.5);
+	color("orange") difference()
+	{
+		Plating(thickness=1.6, fat=0.8);
+		Plating(thickness=4, fat=0);
+	}
+	PlatingRivets();
+}
+
 
 // -------- Modules ----------
+
+
+module ElectricSpear()
+{
+	$fn = 36;
+	length = 22;
+	
+	cylinder(d=2,h=length);
+	mov(z=length/2) for (a=[0, 120, 240])
+	{
+		rot(z=a) mov(x=1) cube([1, .4, length], center=true);
+	}
+	
+	mov(z=12)
+	{
+		cylinder(d=3.5, h=4, center=true);
+		cylinder(d=4.5, h=2, center=true);
+	}
+	
+	mov(z=25) scale([.6, .6, .6])
+	difference()
+	{
+		union()
+		{
+			linear_extrude(height=21,center=false,twist=90,scale=0)
+		    scale([.3,.3,.3]) import("spear_profile.svg");
+			
+			mov(z=-7) rot(z=30)	
+			linear_extrude(height=7,center=false,twist=30,scale=3)
+		    scale([.1,.1,.1]) import("spear_profile.svg");
+		}
+		
+		mov(z=1) scale([1, 1, 1.5]) sphere(r=2.5);
+	}
+	
+	mov(x=2, z=11) rot(y=45) rot(x=180) color("blue") Chain(link=1.2, n=23, up=90);
+}
+
 
 module UrsusBody()
 {

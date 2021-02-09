@@ -15,7 +15,8 @@ spoolD = 10;
 mov(y=13)
 {
 	color("grey") UrsusBody();
-	mov(x=7) rot(y=90) color("grey") UrsusClaw();
+	mov(x=7) rot(y=90) ElectricSpear();
+	// mov(x=7) rot(y=90) UrsusClaw();
 	mov(x=spoolX,y=1,z=spoolZ) rot(x=90) color("lightblue") UrsusSpool();
 	color("white") Plating(thickness=1.2, fat=0.5);
 	color("orange") difference()
@@ -113,6 +114,42 @@ module PlatingRivets()
 	
 }
 
+module ElectricSpear()
+{
+	$fn = 36;
+	length = 22;
+	
+	cylinder(d=2,h=length);
+	mov(z=length/2) for (a=[0, 120, 240])
+	{
+		rot(z=a) mov(x=1) cube([1, .4, length], center=true);
+	}
+	
+	mov(z=12)
+	{
+		cylinder(d=3.5, h=4, center=true);
+		cylinder(d=4.5, h=2, center=true);
+	}
+	
+	mov(z=25) scale([.6, .6, .6])
+	difference()
+	{
+		union()
+		{
+			linear_extrude(height=21,center=false,twist=90,scale=0)
+		    scale([.3,.3,.3]) import("spear_profile.svg");
+			
+			mov(z=-7) rot(z=30)	
+			linear_extrude(height=7,center=false,twist=30,scale=3)
+		    scale([.1,.1,.1]) import("spear_profile.svg");
+		}
+		
+		mov(z=1) scale([1, 1, 1.5]) sphere(r=2.5);
+	}
+	
+	mov(x=2, z=11) rot(y=45) rot(x=180) color("blue") Chain(link=1.2, n=23, up=90);
+}
+
 module UrsusClaw()
 {
 	$fn = 36;
@@ -144,7 +181,7 @@ module UrsusClaw()
 	cylinder(d=1.4, h=17);
 	mov(z=17) cylinder(d1=1.4, d2=0, h=2.2);
 	
-	mov(x=2, z=11) rot(y=45) rot(x=180) Chain(link=1.2, n=23, up=90);
+	mov(x=2, z=11) rot(y=45) rot(x=180) color("blue") Chain(link=1.2, n=23, up=90);
 }
 
 
